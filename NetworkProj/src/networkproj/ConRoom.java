@@ -31,34 +31,47 @@ public class ConRoom extends javax.swing.JFrame {
         startListeningForUpdates(); // Start listening for server updates
     }
 
-    private void startListeningForUpdates() {
-        new Thread(() -> {
-            try {
-                in = new BufferedReader(new InputStreamReader(client.getSocket().getInputStream()));
-                String message;
-                while ((message = in.readLine()) != null) {
-                    System.out.println("Received: " + message); // Debug log
-                    if (message.startsWith("Connected players:")) {
-                        String userListString = message.substring("Connected players: ".length());
-                        List<String> userList = Arrays.asList(userListString.split(","));
-                        updateUserList(userList); // Update the user list in the UI
-                    }
+private void startListeningForUpdates() {
+    new Thread(() -> {
+        try {
+            in = new BufferedReader(new InputStreamReader(client.getSocket().getInputStream()));
+            
+            String message;
+            while ((message = in.readLine()) != null) {
+                System.out.println("Received: " + message); // Debug log
+                if (message.startsWith("Connected players:")) {
+                    String userListString = message.substring("Connected players: ".length());
+                    List<String> userList = Arrays.asList(userListString.split(","));
+                    updateUserList(userList); // Update the user list in the UI
+                } else {
+                    // Optionally, update the text area with other types of message
+                    String username = client.getUsername();
+                    updateTextArea(username); // New method to update the text area with other messages
                 }
-            } catch (IOException e) {
-                e.printStackTrace(); // Print error for debugging
             }
-        }).start();
-    }
+        } catch (IOException e) {
+            e.printStackTrace(); // Print error for debugging
+        }
+    }).start();
+}
 
-    private void updateUserList(List<String> connectedUsers) {
-        SwingUtilities.invokeLater(() -> {
-            if (connectedUsers.isEmpty()) {
-                jTextArea1.setText("No players connected."); // Message if no players are connected
-            } else {
-                jTextArea1.setText(String.join("\n", connectedUsers)); // Update the text area with connected usernames
-            }
-        });
-    }
+private void updateUserList(List<String> connectedUsers) {
+    SwingUtilities.invokeLater(() -> {
+        if (connectedUsers.isEmpty()) {
+            jTextArea1.setText("No players connected."); // Message if no players are connected
+        } else {
+            jTextArea1.setText(String.join("\n", connectedUsers)); // Update the text area with connected usernames
+        }
+    });
+}
+
+// Optional: New method to handle general text updates to the JTextArea
+private void updateTextArea(String message) {
+    SwingUtilities.invokeLater(() -> {
+        jTextArea1.append("\n" + message); // Append the message to the text area
+    });
+}
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
