@@ -143,7 +143,7 @@ public class FirstFrame extends javax.swing.JFrame {
 
         new Thread(() -> {
             try {
-                Socket socket = new Socket("localhost", 12345);
+                Socket socket = new Socket("localhost", 54321);
                 client = new Server.ServerThread(socket);
                 client.sendMessage(username); // Send username to server
 

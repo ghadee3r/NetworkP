@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 public class Server {
- private static final int PORT = 12345;
+ private static final int PORT = 54321;
     private static final int ROOM_CAPACITY = 3; // Maximum of 3 players in the waiting room
     private static Set<String> connectedUsers = ConcurrentHashMap.newKeySet();
     private static List<ServerThread> serverThreads = Collections.synchronizedList(new ArrayList<>());
